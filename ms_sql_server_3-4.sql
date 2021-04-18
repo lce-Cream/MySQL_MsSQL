@@ -1,11 +1,11 @@
 -- 4.1
--- Работа с представлением VIEW. Изменение данных в таблице через представление.
--- Создание AFTER DML триггера для таблицы. Логгирование изменений в history таблицу.
+-- Р Р°Р±РѕС‚Р° СЃ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµРј VIEW. РР·РјРµРЅРµРЅРёРµ РґР°РЅРЅС‹С… РІ С‚Р°Р±Р»РёС†Рµ С‡РµСЂРµР· РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ.
+-- РЎРѕР·РґР°РЅРёРµ AFTER DML С‚СЂРёРіРіРµСЂР° РґР»СЏ С‚Р°Р±Р»РёС†С‹. Р›РѕРіРіРёСЂРѕРІР°РЅРёРµ РёР·РјРµРЅРµРЅРёР№ РІ history С‚Р°Р±Р»РёС†Сѓ.
 
--- a) Создайте таблицу Person.PhoneNumberTypeHst, которая будет хранить информацию об изменениях в таблице Person.PhoneNumberType. 
---	  Обязательные поля, которые должны присутствовать в таблице: ID — первичный ключ IDENTITY(1,1); Action — совершенное действие 
---    (insert, update или delete); ModifiedDate — дата и время, когда была совершена операция; SourceID — первичный ключ исходной таблицы; 
---    UserName — имя пользователя, совершившего операцию. Создайте другие поля, если считаете их нужными.
+-- a) РЎРѕР·РґР°Р№С‚Рµ С‚Р°Р±Р»РёС†Сѓ Person.PhoneNumberTypeHst, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ С…СЂР°РЅРёС‚СЊ РёРЅС„РѕСЂРјР°С†РёСЋ РѕР± РёР·РјРµРЅРµРЅРёСЏС… РІ С‚Р°Р±Р»РёС†Рµ Person.PhoneNumberType. 
+--	  РћР±СЏР·Р°С‚РµР»СЊРЅС‹Рµ РїРѕР»СЏ, РєРѕС‚РѕСЂС‹Рµ РґРѕР»Р¶РЅС‹ РїСЂРёСЃСѓС‚СЃС‚РІРѕРІР°С‚СЊ РІ С‚Р°Р±Р»РёС†Рµ: ID вЂ” РїРµСЂРІРёС‡РЅС‹Р№ РєР»СЋС‡ IDENTITY(1,1); Action вЂ” СЃРѕРІРµСЂС€РµРЅРЅРѕРµ РґРµР№СЃС‚РІРёРµ 
+--    (insert, update РёР»Рё delete); ModifiedDate вЂ” РґР°С‚Р° Рё РІСЂРµРјСЏ, РєРѕРіРґР° Р±С‹Р»Р° СЃРѕРІРµСЂС€РµРЅР° РѕРїРµСЂР°С†РёСЏ; SourceID вЂ” РїРµСЂРІРёС‡РЅС‹Р№ РєР»СЋС‡ РёСЃС…РѕРґРЅРѕР№ С‚Р°Р±Р»РёС†С‹; 
+--    UserName вЂ” РёРјСЏ РїРѕР»СЊР·РѕРІР°С‚РµР»СЏ, СЃРѕРІРµСЂС€РёРІС€РµРіРѕ РѕРїРµСЂР°С†РёСЋ. РЎРѕР·РґР°Р№С‚Рµ РґСЂСѓРіРёРµ РїРѕР»СЏ, РµСЃР»Рё СЃС‡РёС‚Р°РµС‚Рµ РёС… РЅСѓР¶РЅС‹РјРё.
 CREATE TABLE Person.PhoneNumberTypeHst
 (
 	ID INT PRIMARY KEY IDENTITY(1,1),
@@ -16,8 +16,8 @@ CREATE TABLE Person.PhoneNumberTypeHst
 );
 GO
 
--- b) Создайте три AFTER триггера для трех операций INSERT, UPDATE, DELETE для таблицы Person.PhoneNumberType. 
---	  Каждый триггер должен заполнять таблицу Person.PhoneNumberTypeHst с указанием типа операции в поле Action.
+-- b) РЎРѕР·РґР°Р№С‚Рµ С‚СЂРё AFTER С‚СЂРёРіРіРµСЂР° РґР»СЏ С‚СЂРµС… РѕРїРµСЂР°С†РёР№ INSERT, UPDATE, DELETE РґР»СЏ С‚Р°Р±Р»РёС†С‹ Person.PhoneNumberType. 
+--	  РљР°Р¶РґС‹Р№ С‚СЂРёРіРіРµСЂ РґРѕР»Р¶РµРЅ Р·Р°РїРѕР»РЅСЏС‚СЊ С‚Р°Р±Р»РёС†Сѓ Person.PhoneNumberTypeHst СЃ СѓРєР°Р·Р°РЅРёРµРј С‚РёРїР° РѕРїРµСЂР°С†РёРё РІ РїРѕР»Рµ Action.
 CREATE TRIGGER OnInsert ON Person.PhoneNumberType
 AFTER INSERT
 AS
@@ -39,8 +39,8 @@ INSERT INTO Person.PhoneNumberTypeHst
 SELECT 'del', GETDATE(), del.PhoneNumberTypeID, CURRENT_USER FROM deleted del
 GO
 
--- c) Создайте представление VIEW, отображающее все поля таблицы Person.PhoneNumberType. Сделайте невозможным просмотр исходного кода 
---	  представления.
+-- c) РЎРѕР·РґР°Р№С‚Рµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ VIEW, РѕС‚РѕР±СЂР°Р¶Р°СЋС‰РµРµ РІСЃРµ РїРѕР»СЏ С‚Р°Р±Р»РёС†С‹ Person.PhoneNumberType. РЎРґРµР»Р°Р№С‚Рµ РЅРµРІРѕР·РјРѕР¶РЅС‹Рј РїСЂРѕСЃРјРѕС‚СЂ РёСЃС…РѕРґРЅРѕРіРѕ РєРѕРґР° 
+--	  РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.
 CREATE VIEW View_PersonPhoneNumberType
 WITH ENCRYPTION
 AS
@@ -48,8 +48,8 @@ SELECT * FROM Person.PhoneNumberType;
 GO
 select * from View_PersonPhoneNumberType
 
--- d) Вставьте новую строку в Person.PhoneNumberType через представление. Обновите вставленную строку. Удалите вставленную строку. 
---	  Убедитесь, что все три операции отображены в Person.PhoneNumberTypeHst.
+-- d) Р’СЃС‚Р°РІСЊС‚Рµ РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ РІ Person.PhoneNumberType С‡РµСЂРµР· РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ. РћР±РЅРѕРІРёС‚Рµ РІСЃС‚Р°РІР»РµРЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ. РЈРґР°Р»РёС‚Рµ РІСЃС‚Р°РІР»РµРЅРЅСѓСЋ СЃС‚СЂРѕРєСѓ. 
+--	  РЈР±РµРґРёС‚РµСЃСЊ, С‡С‚Рѕ РІСЃРµ С‚СЂРё РѕРїРµСЂР°С†РёРё РѕС‚РѕР±СЂР°Р¶РµРЅС‹ РІ Person.PhoneNumberTypeHst.
 insert into View_PersonPhoneNumberType(Name, ModifiedDate)
 values('other', GETDATE());
 
@@ -62,10 +62,10 @@ where Name='personal';
 select * from Person.PhoneNumberTypeHst;
 GO
 
--- 4.2 Индексированное представление. Создание AFTER DML триггера для представления.
+-- 4.2 РРЅРґРµРєСЃРёСЂРѕРІР°РЅРЅРѕРµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ. РЎРѕР·РґР°РЅРёРµ AFTER DML С‚СЂРёРіРіРµСЂР° РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ.
 
--- a) Создайте представление VIEW, отображающее данные из таблиц Person.PhoneNumberType и Person.PersonPhone. 
---	  Создайте уникальный кластерный индекс в представлении по полям PhoneNumberTypeID и BusinessEntityID.
+-- a) РЎРѕР·РґР°Р№С‚Рµ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ VIEW, РѕС‚РѕР±СЂР°Р¶Р°СЋС‰РµРµ РґР°РЅРЅС‹Рµ РёР· С‚Р°Р±Р»РёС† Person.PhoneNumberType Рё Person.PersonPhone. 
+--	  РЎРѕР·РґР°Р№С‚Рµ СѓРЅРёРєР°Р»СЊРЅС‹Р№ РєР»Р°СЃС‚РµСЂРЅС‹Р№ РёРЅРґРµРєСЃ РІ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРё РїРѕ РїРѕР»СЏРј PhoneNumberTypeID Рё BusinessEntityID.
 CREATE VIEW View_PersonPersonPhone_PersonPhoneNumberType
 WITH SCHEMABINDING
 AS
@@ -80,8 +80,8 @@ ON View_PersonPersonPhone_PersonPhoneNumberType (PhoneNumberTypeID, BusinessEnti
 select * from View_PersonPersonPhone_PersonPhoneNumberType;
 GO
 
--- b) Создайте один INSTEAD OF триггер для представления на три операции INSERT, UPDATE, DELETE. Триггер должен выполнять 
---	  соответствующие операции в таблицах Person.PhoneNumberType и Person.PersonPhone для указанного BusinessEntityID.
+-- b) РЎРѕР·РґР°Р№С‚Рµ РѕРґРёРЅ INSTEAD OF С‚СЂРёРіРіРµСЂ РґР»СЏ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёСЏ РЅР° С‚СЂРё РѕРїРµСЂР°С†РёРё INSERT, UPDATE, DELETE. РўСЂРёРіРіРµСЂ РґРѕР»Р¶РµРЅ РІС‹РїРѕР»РЅСЏС‚СЊ 
+--	  СЃРѕРѕС‚РІРµС‚СЃС‚РІСѓСЋС‰РёРµ РѕРїРµСЂР°С†РёРё РІ С‚Р°Р±Р»РёС†Р°С… Person.PhoneNumberType Рё Person.PersonPhone РґР»СЏ СѓРєР°Р·Р°РЅРЅРѕРіРѕ BusinessEntityID.
 CREATE TRIGGER insteadOfInsert
 ON View_PersonPersonPhone_PersonPhoneNumberType
 INSTEAD OF INSERT
@@ -121,9 +121,9 @@ GO
 
 drop trigger insteadOfInsert, InsteadOfUpdate, InsteadOfDelete
 
--- c) Вставьте новую строку в представление, указав новые данные для PhoneNumberType и PersonPhone для существующего BusinessEntityID 
---    (например 1). Триггер должен добавить новые строки в таблицы Person.PhoneNumberType и Person.PersonPhone. Обновите вставленные 
---    строки через представление. Удалите строки.
+-- c) Р’СЃС‚Р°РІСЊС‚Рµ РЅРѕРІСѓСЋ СЃС‚СЂРѕРєСѓ РІ РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ, СѓРєР°Р·Р°РІ РЅРѕРІС‹Рµ РґР°РЅРЅС‹Рµ РґР»СЏ PhoneNumberType Рё PersonPhone РґР»СЏ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ BusinessEntityID 
+--    (РЅР°РїСЂРёРјРµСЂ 1). РўСЂРёРіРіРµСЂ РґРѕР»Р¶РµРЅ РґРѕР±Р°РІРёС‚СЊ РЅРѕРІС‹Рµ СЃС‚СЂРѕРєРё РІ С‚Р°Р±Р»РёС†С‹ Person.PhoneNumberType Рё Person.PersonPhone. РћР±РЅРѕРІРёС‚Рµ РІСЃС‚Р°РІР»РµРЅРЅС‹Рµ 
+--    СЃС‚СЂРѕРєРё С‡РµСЂРµР· РїСЂРµРґСЃС‚Р°РІР»РµРЅРёРµ. РЈРґР°Р»РёС‚Рµ СЃС‚СЂРѕРєРё.
 insert into View_PersonPersonPhone_PersonPhoneNumberType
 (BusinessEntityID, PhoneNumber, PhoneNumberTypeID, PersonModifiedDate, TypeName, TypeModifiedDate)
 values (0, '01234', '1', GETDATE(), 'Cell',  (select ModifiedDate from Person.PhoneNumberType where Name='Cell'));
@@ -139,10 +139,10 @@ select * from Person.PhoneNumberType
 select * from Person.PersonPhone
 select * from View_PersonPersonPhone_PersonPhoneNumberType
 GO
--- 5 Пользовательские функции: scalar-valued, inline table-valued, multistatement table-valued. Операторы CROSS APPLY и OUTER APPLY 
+-- 5 РџРѕР»СЊР·РѕРІР°С‚РµР»СЊСЃРєРёРµ С„СѓРЅРєС†РёРё: scalar-valued, inline table-valued, multistatement table-valued. РћРїРµСЂР°С‚РѕСЂС‹ CROSS APPLY Рё OUTER APPLY 
 
--- Создайте scalar-valued функцию, которая будет принимать в качестве входного параметра id заказа (Sales.SalesOrderHeader.SalesOrderID) 
--- и возвращать итоговую сумму для заказа (сумма по полям SubTotal, TaxAmt, Freight).
+-- РЎРѕР·РґР°Р№С‚Рµ scalar-valued С„СѓРЅРєС†РёСЋ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РїСЂРёРЅРёРјР°С‚СЊ РІ РєР°С‡РµСЃС‚РІРµ РІС…РѕРґРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° id Р·Р°РєР°Р·Р° (Sales.SalesOrderHeader.SalesOrderID) 
+-- Рё РІРѕР·РІСЂР°С‰Р°С‚СЊ РёС‚РѕРіРѕРІСѓСЋ СЃСѓРјРјСѓ РґР»СЏ Р·Р°РєР°Р·Р° (СЃСѓРјРјР° РїРѕ РїРѕР»СЏРј SubTotal, TaxAmt, Freight).
 
 CREATE FUNCTION OrderSum(@id INT)
 RETURNS INT AS
@@ -156,8 +156,8 @@ GO
 select dbo.OrderSum(43659) as ordersum;
 GO
 
--- Создайте inline table-valued функцию, которая будет принимать в качестве входного параметра id заказа
--- на производство (Production.WorkOrder.WorkOrderID), а возвращать детали заказа из Production.WorkOrderRouting.
+-- РЎРѕР·РґР°Р№С‚Рµ inline table-valued С„СѓРЅРєС†РёСЋ, РєРѕС‚РѕСЂР°СЏ Р±СѓРґРµС‚ РїСЂРёРЅРёРјР°С‚СЊ РІ РєР°С‡РµСЃС‚РІРµ РІС…РѕРґРЅРѕРіРѕ РїР°СЂР°РјРµС‚СЂР° id Р·Р°РєР°Р·Р°
+-- РЅР° РїСЂРѕРёР·РІРѕРґСЃС‚РІРѕ (Production.WorkOrder.WorkOrderID), Р° РІРѕР·РІСЂР°С‰Р°С‚СЊ РґРµС‚Р°Р»Рё Р·Р°РєР°Р·Р° РёР· Production.WorkOrderRouting.
 
 select * from Production.WorkOrder
 select * from Production.WorkOrderRouting
@@ -169,19 +169,19 @@ AS
 	RETURN (select * from Production.WorkOrderRouting wor where wor.WorkOrderID=@id)
 GO
 
--- Вызовите функцию для каждого заказа, применив оператор CROSS APPLY.
+-- Р’С‹Р·РѕРІРёС‚Рµ С„СѓРЅРєС†РёСЋ РґР»СЏ РєР°Р¶РґРѕРіРѕ Р·Р°РєР°Р·Р°, РїСЂРёРјРµРЅРёРІ РѕРїРµСЂР°С‚РѕСЂ CROSS APPLY.
 
 SELECT * FROM Production.WorkOrder AS wo
 CROSS APPLY Details(wo.WorkOrderID) AS wr;
 GO
 
--- Вызовите функцию для каждого заказа, применив оператор OUTER APPLY.
+-- Р’С‹Р·РѕРІРёС‚Рµ С„СѓРЅРєС†РёСЋ РґР»СЏ РєР°Р¶РґРѕРіРѕ Р·Р°РєР°Р·Р°, РїСЂРёРјРµРЅРёРІ РѕРїРµСЂР°С‚РѕСЂ OUTER APPLY.
 
 SELECT * FROM Production.WorkOrder AS wo
 OUTER APPLY Details(wo.WorkOrderID) AS wr;
 GO
 
--- Измените созданную inline table-valued функцию, сделав ее multistatement table-valued (предварительно сохранив для проверки код создания inline table-valued функции).
+-- РР·РјРµРЅРёС‚Рµ СЃРѕР·РґР°РЅРЅСѓСЋ inline table-valued С„СѓРЅРєС†РёСЋ, СЃРґРµР»Р°РІ РµРµ multistatement table-valued (РїСЂРµРґРІР°СЂРёС‚РµР»СЊРЅРѕ СЃРѕС…СЂР°РЅРёРІ РґР»СЏ РїСЂРѕРІРµСЂРєРё РєРѕРґ СЃРѕР·РґР°РЅРёСЏ inline table-valued С„СѓРЅРєС†РёРё).
 
 CREATE FUNCTION DetailsMulti(@id INT)
 RETURNS @routing TABLE
